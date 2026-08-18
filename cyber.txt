@@ -1,0 +1,810 @@
+ 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Logbook</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #525659;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Modal Styles */
+        #name-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .modal-content h2 {
+            color: #1c3f77;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .modal-content p {
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .modal-content input {
+            padding: 12px 15px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 2px solid #cce0f5;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .modal-content input:focus {
+            border-color: #19538c;
+        }
+
+        .modal-content button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #19538c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-content button:hover {
+            background: #123d6a;
+        }
+
+        /* Rest of the document styles */
+        .action-bar {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 210mm;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-bar p {
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .download-btn {
+            background-color: #19538c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background-color: #123d6a;
+        }
+
+        .page {
+            background-color: white;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            color: #1c3f77;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .header h2 {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #444;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .header h2 span {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            text-transform: none;
+        }
+
+        .header h3 {
+            margin: 15px 0 10px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #3b608c;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 2px solid #3eb4e6;
+            border-bottom: 2px solid #3eb4e6;
+            margin-bottom: 20px;
+        }
+
+        .info-cell {
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-cell:nth-child(odd) {
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .info-cell:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .dynamic-student-name {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background-color: #19538c;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            border-right: 1px solid #4d7aab;
+        }
+        th:last-child { border-right: none; }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #cce0f5;
+            border-right: 1px solid #cce0f5;
+            vertical-align: top;
+            color: #444;
+            line-height: 1.4;
+        }
+        td:first-child { border-left: 2px solid #19538c; text-align: center; font-weight: bold;}
+        td:last-child { border-right: 2px solid #19538c; }
+        
+        tr:last-child td {
+            border-bottom: 2px solid #19538c;
+        }
+
+        .week-header td {
+            background-color: #f0f7fd;
+            font-weight: 600;
+            color: #1c3f77;
+            padding: 8px 10px;
+            font-size: 12px;
+            border-top: 2px solid #3eb4e6;
+            border-bottom: 1px solid #3eb4e6;
+        }
+        
+        .holiday-row td {
+            background-color: #fdf7f0;
+            color: #b05c10;
+            font-style: italic;
+            font-weight: 600;
+            padding: 8px 10px;
+        }
+        
+        .holiday-row td:first-child {
+            color: #b05c10;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background-color: #e6f2fc;
+            color: #19538c;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .date-col strong {
+            color: #1c3f77;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .date-col span {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .signatures-container {
+            border: 2px solid #1c3f77;
+            border-radius: 8px;
+            margin-top: 30px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .sig-header {
+            background-color: #1c3f77;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .sig-flex {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 10px 30px 10px;
+        }
+
+        .sig-block {
+            text-align: center;
+            width: 30%;
+        }
+
+        .sig-line {
+            border-top: 1px solid #333;
+            margin: 50px 10px 10px 10px;
+        }
+
+        .sig-name {
+            font-weight: 600;
+            color: #1c3f77;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .sig-desc {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .action-bar, #name-modal {
+                display: none !important;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+                padding: 15mm;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            .week-header { page-break-before: auto; }
+            .signatures-container { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Name Entry Modal -->
+    <div id="name-modal">
+        <div class="modal-content">
+            <h2>Welcome to Logbook</h2>
+            <p>Please enter your full name to generate the report:</p>
+            <input type="text" id="studentNameInput" placeholder="e.g. Yogender Singh" autofocus>
+            <br>
+            <button onclick="submitName()">Generate Logbook</button>
+        </div>
+    </div>
+
+    <!-- Action Bar (Hidden in print) -->
+    <div class="action-bar">
+        <p>💡 <b>Tip:</b> Click the button and select <b>"Save as PDF"</b> as the destination.</p>
+        <button class="download-btn" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download as PDF
+        </button>
+    </div>
+
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <h1>GOSWAMI GANESH DUTTA SANATAN DHARMA COLLEGE</h1>
+            <h2>SECTOR-32C, CHANDIGARH <span>Department of Computer Science and IT</span></h2>
+            <h3>Internship Activity Logbook</h3>
+            <div class="badge">DAY-WISE RECORD • DATA SCIENCE, ML & DL • 17 JUN – 28 JUL 2026</div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <div class="info-cell">
+                <div class="info-label">Student Name</div>
+                <div class="info-value dynamic-student-name">...</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">College</div>
+                <div class="info-value">Goswami Ganesh Dutta SD College, Chandigarh</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Industry Training Partner</div>
+                <div class="info-value">Meander Software Pvt. Ltd., Sector-118, Mohali</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Mentor Name & Designation</div>
+                <div class="info-value">Mr. Munna Kumar — AI Engineer & Full Stack Developer</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Internship Duration</div>
+                <div class="info-value">17 June 2026 – 28 July 2026</div>
+            </div>
+            <div class="info-cell">
+                <div class="info-label">Supervisor</div>
+                <div class="info-value">Ms. Anuradha</div>
+            </div>
+            <div class="info-cell" style="border-bottom: none;">
+                <div class="info-label">Department</div>
+                <div class="info-value">Department of Computer Science and IT</div>
+            </div>
+            <div class="info-cell" style="border-bottom: none;">
+                <div class="info-label">Programme</div>
+                <div class="info-value">Data Science, ML & DL — 2026</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">WK</th>
+                    <th width="15%">DATE</th>
+                    <th width="45%">ACTIVITIES PERFORMED</th>
+                    <th width="20%">SKILL / TOPIC</th>
+                    <th width="15%">MENTOR REMARKS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Week 1 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 1 • 17 Jun - 21 Jun 2026 • Python & SQL</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>17 Jun 2026</strong><span>Wednesday</span></td>
+                    <td>Started the internship. Got introduced to Python programming, environment setup, data types, and basic operators.</td>
+                    <td><span class="skill-tag">Python Basics</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>18 Jun 2026</strong><span>Thursday</span></td>
+                    <td>Learned about control flow statements (if-else, loops) and functions. Wrote reusable code blocks.</td>
+                    <td><span class="skill-tag">Control Flow</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>19 Jun 2026</strong><span>Friday</span></td>
+                    <td>Introduction to Databases and RDBMS concepts. Installed MySQL server, created a new database, and understood relations.</td>
+                    <td><span class="skill-tag">Databases Setup</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>20 Jun 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>21 Jun 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 2 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 2 • 22 Jun - 28 Jun 2026 • SQL & NumPy</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>22 Jun 2026</strong><span>Monday</span></td>
+                    <td>Practiced SQL queries: creating tables, inserting data, and basic SELECT statements with filtering using the WHERE clause.</td>
+                    <td><span class="skill-tag">SQL Queries</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>23 Jun 2026</strong><span>Tuesday</span></td>
+                    <td>Covered advanced SQL concepts including JOINS, grouping, and aggregations. Practiced connecting Python to MySQL.</td>
+                    <td><span class="skill-tag">SQL & Python</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>24 Jun 2026</strong><span>Wednesday</span></td>
+                    <td>Introduction to NumPy. Learned about N-dimensional arrays, vectorization, and performing fast mathematical operations.</td>
+                    <td><span class="skill-tag">NumPy Basics</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>25 Jun 2026</strong><span>Thursday</span></td>
+                    <td>Deep dive into NumPy broadcasting, indexing, and matrix operations. Solved various array manipulation problems.</td>
+                    <td><span class="skill-tag">Advanced NumPy</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>26 Jun 2026</strong><span>Friday</span></td>
+                    <td>Introduced to Pandas library. Learned about Series and DataFrames, and how to load tabular data from CSV files.</td>
+                    <td><span class="skill-tag">Pandas Basics</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>27 Jun 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>28 Jun 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 3 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 3 • 29 Jun - 05 Jul 2026 • Data Manipulation & Scraping</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>29 Jun 2026</strong><span>Monday</span></td>
+                    <td>Practiced data manipulation with Pandas: filtering records, grouping data, merging datasets, and reshaping.</td>
+                    <td><span class="skill-tag">Data Manipulation</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>30 Jun 2026</strong><span>Tuesday</span></td>
+                    <td>Learned essential techniques for handling missing values, data cleaning, and preprocessing text in Pandas.</td>
+                    <td><span class="skill-tag">Data Cleaning</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>01 Jul 2026</strong><span>Wednesday</span></td>
+                    <td>Introduction to Web Scraping using Python and BeautifulSoup. Extracted basic data from static HTML web pages.</td>
+                    <td><span class="skill-tag">Web Scraping</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>02 Jul 2026</strong><span>Thursday</span></td>
+                    <td>Advanced scraping techniques handling dynamic content. Structured and stored the scraped data cleanly into Pandas DataFrames.</td>
+                    <td><span class="skill-tag">Data Extraction</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>03 Jul 2026</strong><span>Friday</span></td>
+                    <td>Started Data Visualization with Matplotlib. Created line plots, bar charts, and scatter plots to understand data trends.</td>
+                    <td><span class="skill-tag">Matplotlib Basics</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>04 Jul 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>05 Jul 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 4 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 4 • 06 Jul - 12 Jul 2026 • Visualization & Machine Learning</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>06 Jul 2026</strong><span>Monday</span></td>
+                    <td>Advanced plotting with Matplotlib: customizing axes, adding legends, styling, and creating multiple subplots.</td>
+                    <td><span class="skill-tag">Advanced Plotting</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>07 Jul 2026</strong><span>Tuesday</span></td>
+                    <td>Statistical data visualization using Seaborn. Created heatmaps, pair plots, and violin plots to analyze feature distributions.</td>
+                    <td><span class="skill-tag">Seaborn Charts</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>08 Jul 2026</strong><span>Wednesday</span></td>
+                    <td>Introduction to Machine Learning. Understood the differences between Supervised vs Unsupervised learning and the ML workflow.</td>
+                    <td><span class="skill-tag">ML Concepts</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>09 Jul 2026</strong><span>Thursday</span></td>
+                    <td>Studied and implemented Linear Regression and Logistic Regression algorithms using Scikit-Learn for prediction tasks.</td>
+                    <td><span class="skill-tag">Regression Models</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>10 Jul 2026</strong><span>Friday</span></td>
+                    <td>Learned about Decision Trees and Random Forests. Practiced building predictive models on classification datasets.</td>
+                    <td><span class="skill-tag">Tree-based Models</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>11 Jul 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>12 Jul 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 5 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 5 • 13 Jul - 19 Jul 2026 • Advanced ML & Intro to DL</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>13 Jul 2026</strong><span>Monday</span></td>
+                    <td>Practiced evaluating models using Accuracy, Precision, Recall, and Confusion Matrices. Handled data imbalance.</td>
+                    <td><span class="skill-tag">Model Evaluation</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>14 Jul 2026</strong><span>Tuesday</span></td>
+                    <td>Explored Unsupervised Learning. Implemented K-Means Clustering and Dimensionality Reduction using PCA.</td>
+                    <td><span class="skill-tag">Clustering & PCA</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>15 Jul 2026</strong><span>Wednesday</span></td>
+                    <td>Built an end-to-end Machine Learning pipeline on a real-world dataset. Handled preprocessing, training, testing, and validation.</td>
+                    <td><span class="skill-tag">ML Pipeline</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>16 Jul 2026</strong><span>Thursday</span></td>
+                    <td>Introduction to Artificial Neural Networks (ANN). Understood the mechanics of neurons, weights, biases, and activation functions.</td>
+                    <td><span class="skill-tag">ANN Architecture</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>17 Jul 2026</strong><span>Friday</span></td>
+                    <td>Studied Forward and Backward Propagation in depth. Learned about gradient descent optimization and loss functions.</td>
+                    <td><span class="skill-tag">Backpropagation</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>18 Jul 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>19 Jul 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 6 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 6 • 20 Jul - 26 Jul 2026 • Deep Learning & Computer Vision</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>20 Jul 2026</strong><span>Monday</span></td>
+                    <td>Introduction to TensorFlow and Keras frameworks. Built, compiled, and trained a basic sequential neural network model.</td>
+                    <td><span class="skill-tag">TensorFlow & Keras</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>21 Jul 2026</strong><span>Tuesday</span></td>
+                    <td>Experimented with different hyperparameters in neural networks (epochs, batch size, learning rate) to improve accuracy.</td>
+                    <td><span class="skill-tag">DL Optimization</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>22 Jul 2026</strong><span>Wednesday</span></td>
+                    <td>Learned about Convolutional Neural Networks (CNN). Understood convolutional layers, pooling, and filters.</td>
+                    <td><span class="skill-tag">CNN Basics</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>23 Jul 2026</strong><span>Thursday</span></td>
+                    <td>Built and trained a CNN model for image classification tasks. Applied data augmentation to prevent overfitting.</td>
+                    <td><span class="skill-tag">Computer Vision</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>24 Jul 2026</strong><span>Friday</span></td>
+                    <td>Explored Recurrent Neural Networks (RNN). Handled sequential data and built a basic network for time-series forecasting.</td>
+                    <td><span class="skill-tag">RNN & Sequences</span></td>
+                    <td></td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>25 Jul 2026</strong><span>Saturday</span></td>
+                    <td colspan="3">📅 Holiday (Saturday)</td>
+                </tr>
+                <tr class="holiday-row">
+                    <td>—</td>
+                    <td class="date-col"><strong>26 Jul 2026</strong><span>Sunday</span></td>
+                    <td colspan="3">📅 Holiday (Sunday)</td>
+                </tr>
+
+                <!-- Week 7 -->
+                <tr class="week-header">
+                    <td colspan="5">📍 Week 7 • 27 Jul - 28 Jul 2026 • Advanced DL & Wrap-Up</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>27 Jul 2026</strong><span>Monday</span></td>
+                    <td>Introduction to Long Short-Term Memory (LSTM) networks. Used LSTMs to build a basic Natural Language Processing (NLP) model.</td>
+                    <td><span class="skill-tag">LSTM & NLP</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="date-col"><strong>28 Jul 2026</strong><span>Tuesday</span></td>
+                    <td>Final assessment covering Python, Data Science, ML, and DL. Project wrap-up and final feedback session with the mentor.</td>
+                    <td><span class="skill-tag">Final Wrap-Up</span></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Signatures (Summary Box was removed) -->
+        <div class="signatures-container">
+            <div class="sig-header">SIGNATURES</div>
+            <div class="sig-flex">
+                <div class="sig-block">
+                    <div class="sig-line"></div>
+                    <div class="sig-name dynamic-student-name">...</div>
+                    <div class="sig-desc">Computer Science Student<br>Dept. of Computer Science and IT<br>GGDSD College, Chandigarh</div>
+                </div>
+                <div class="sig-block">
+                    <div class="sig-line"></div>
+                    <div class="sig-name">Mr. Munna Kumar</div>
+                    <div class="sig-desc">Mentor<br>Senior AI Engineer & Full Stack Developer<br>Meander Software Pvt. Ltd.</div>
+                </div>
+                <div class="sig-block">
+                    <div class="sig-line"></div>
+                    <div class="sig-name">Ms. Anuradha</div>
+                    <div class="sig-desc">Supervisor<br>GGDSD College, Chandigarh</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Modal -->
+    <script>
+        // Setup input to listen for Enter key
+        document.getElementById('studentNameInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                submitName();
+            }
+        });
+
+        // Function to handle name submission
+        function submitName() {
+            const name = document.getElementById('studentNameInput').value.trim();
+            if (name) {
+                // Update all elements showing student name
+                const elements = document.querySelectorAll('.dynamic-student-name');
+                elements.forEach(el => {
+                    el.innerText = name;
+                });
+                // Hide modal
+                document.getElementById('name-modal').style.display = 'none';
+            } else {
+                alert('Please enter your name to proceed.');
+                document.getElementById('studentNameInput').focus();
+            }
+        }
+    </script>
+</body>
+</html>
